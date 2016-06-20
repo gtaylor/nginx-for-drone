@@ -14,14 +14,14 @@ MISSING=""
 if [ "${MISSING}" != "" ]; then
   echo "Missing required environment variables:" >&2
   echo " ${MISSING}" >&2
-  exit 1 
+  exit 1
   fi
 
 #Processing DOMAIN into an array
 DOMAINSARRAY=($(echo "${DOMAIN}" | awk -F ";" '{for(i=1;i<=NF;i++) print $i;}'))
 echo "Provided domains"
 printf "%s\n" "${DOMAINSARRAY[@]}"
-  
+
 #Processing UPSTREAM into an array
 UPSTREAMARRAY=($(echo "${UPSTREAM}" | awk -F ";" '{for(i=1;i<=NF;i++) print $i;}'))
 echo "Services to reverse-proxy"
@@ -101,11 +101,11 @@ if [ ! -f /etc/letsencrypt/san_list ]; then
  "${DOMAIN}"
 EOF
   fresh=true
-else 
+else
   old_san=$(cat /etc/letsencrypt/san_list)
   if [ "${DOMAIN}" != "${old_san}" ]; then
     fresh=true
-  else 
+  else
     fresh=false
   fi
 fi
@@ -114,7 +114,7 @@ fi
   if [ $fresh = true ]; then
     echo "The SAN list has changed, removing the old certificate and ask for a new one."
     rm -rf /etc/letsencrypt/{live,archive,keys,renewal}
-   
+
    echo "letsencrypt certonly "${letscmd}" \
     --standalone \
     "${SERVER}" \
