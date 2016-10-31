@@ -1,8 +1,6 @@
-# Let's Nginx
+# Drone Proxy
 
-*[dockerhub build](https://hub.docker.com/r/smashwilson/lets-nginx/)*
-
-Put browser-valid TLS termination in front of any Dockerized HTTP service with one command.
+Put browser-valid TLS termination in front of Drone Server with one command.
 
 ```bash
 docker run --detach \
@@ -13,7 +11,7 @@ docker run --detach \
   --env UPSTREAM=backend:8080 \
   --publish 80:80 \
   --publish 443:443 \
-  smashwilson/lets-nginx
+  gtaylor/nginx-for-drone
 ```
 
 Issues certificates from [letsencrypt](https://letsencrypt.org/), installs them in [nginx](https://www.nginx.com/), and schedules a cron job to reissue them monthly.
@@ -29,7 +27,7 @@ Before you begin, you'll need:
 
 ## Usage
 
-Launch your backend container and note its name, then launch `smashwilson/lets-nginx` with the following parameters:
+Launch your backend container and note its name, then launch `gtaylor/nginx-for-drone` with the following parameters:
 
  * `--link backend:backend` to link your backend service's container to this one. *(This may be unnecessary depending on Docker's [networking configuration](https://docs.docker.com/engine/userguide/networking/dockernetworks/).)*
  * `-e EMAIL=` your email address, used to register with letsencrypt.
@@ -81,7 +79,7 @@ docker run --detach \
   --volume letsencrypt:/etc/letsencrypt \
   --volume letsencrypt-backups:/var/lib/letsencrypt \
   --volume dhparam-cache:/cache \
-  smashwilson/lets-nginx
+  gtaylor/nginx-for-drone
 ```
 
 ## Adjusting Nginx configuration
@@ -96,7 +94,7 @@ The following variable substitutions are made while processing all of these file
 For example, to adjust `nginx.conf`, create that file in your new image directory with the [baseline content](templates/nginx.conf) and desired modifications. Within your `Dockerfile` *ADD* this file and it will be used to create the nginx configuration instead.
 
 ```docker
-FROM smashwilson/lets-nginx
+FROM gtaylor/nginx-for-drone
 
 ADD nginx.conf /templates/nginx.conf
 ```
