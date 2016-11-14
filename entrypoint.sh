@@ -116,7 +116,7 @@ fi
     rm -rf /etc/letsencrypt/{live,archive,keys,renewal}
 
    echo "letsencrypt certonly "${letscmd}" \
-    --standalone \
+    --standalone --text\
     "${SERVER}" \
     --email "${EMAIL}" --agree-tos \
     --expand " > /etc/nginx/lets
